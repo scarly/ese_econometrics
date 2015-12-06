@@ -1,0 +1,83 @@
+---
+title: "Econometrics - Week 1"
+author: "martinvanelp"
+date: "5 november 2015"
+output: html_document
+---
+
+# Lectures
+```{r, echo=FALSE}
+shop <- read.csv2("Dataset1.txt", sep = "\t")
+hist(shop$Sales)
+hist(shop$Price)
+plot(shop$Price, shop$Sales)
+
+fit<- lm(Sales ~ Price, data = shop)
+summary(fit)
+
+hist(fit$residuals)
+```
+
+# Exercise 1.1
+Dataset TrainExer11 contains survey outcomes of a travel agency that wishes to improve recommendation strategies for its clients. The dataset contains 26 observations on age and average daily expenditures during holidays.
+
+## Questions
+(a) Make two histograms, one of expenditures and the other of age. Make also a scatter diagram with expenditures on the vertical axis versus age on the horizontal axis.
+
+```{r, echo=FALSE}
+agency <- read.csv2("TrainExer11.txt", sep = "\t")
+
+hist(agency$Age)
+hist(agency$Expenditures)
+
+plot(x = agency$Age, y = agency$Expenditures)
+```
+
+(b) In what respect do the data in this scatter diagram look different from the case of the sales and price data discussed in the lecture?
+
+**They seem grouped, and there seems to be little correlation.**
+
+(c) Propose a method to analyze these data in a way that assists the travel agent in making recommendations to future clients.
+
+**Include a dummy variable to separate the two age groups.**
+
+The scatter diagram indicates two groups of clients. Younger clients spend more than older ones. Further, expenditures tend to increase with age for younger clients, whereas the pattern is less clear for older clients.
+
+(d) Compute the sample mean of expenditures of all 26 clients.
+
+**`r mean(agency$Expenditures)`**
+
+(e) Compute two sample means of expenditures, one for clients of age forty or more and the other for clients of age below forty.
+
+**>=40: `r mean(agency[agency$Age >= 40,]$Expenditures)` | <40: `r mean(agency[agency$Age < 40,]$Expenditures)`**
+
+(f) What daily expenditures would you predict for a new client of fifty years old? And for someone who is twenty-five years old?
+
+**50: `r mean(agency[agency$Age >= 40,]$Expenditures)` | 25: `r mean(agency[agency$Age < 40,]$Expenditures)`**
+
+# Exercise 1.2
+-
+
+# Exercise 1.3
+Dataset TrainExer13 contains the winning times (W) of the Olympic 100-meter finals (for men) from 1948 to 2004. The calendar years 1948-2004 are transformed to games (G) 1-15 to simplify computations. A simple regression model for the trend in winning times is Wi = ?? + ??Gi + ??i.
+
+## Questions
+(a) Compute a and b, and determine the values of R2 and s.
+```{r, echo=FALSE}
+olympics <- read.csv("TrainExer13.txt", sep = "\t", 
+                      colClasses = "numeric")
+
+regression <- lm(Winning.time.men ~ Game, data = olympics)
+summary(regression)
+```
+
+(b) Are you confident on the predictive ability of this model? Motivate your answer.
+**Yes. Rather high R2 and the (descending) trend is expected**
+
+(c) What prediction do you get for 2008, 2012, and 2016? Compare your predictions with the actual winning times.
+```{r, echo=FALSE}
+predict(regression, newdata = data.frame(Game = c(16:18)))
+```
+
+# Exercise 1.4
+-
